@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data.json:/app/data.json
+      - ./index.html:/app/index.html
+      - ./styles.css:/app/styles.css
+      - ./script.js:/app/script.js
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped 

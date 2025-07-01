@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q3 Prospecting Tracker - Sales Playbook</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Q3 Prospecting Tracker</h1>
+            <p class="subtitle">Developing Your Sales Playbook - Quarterly Overview</p>
+        </header>
+
+        <div class="controls">
+            <button id="exportData" class="export-btn">Export Data</button>
+        </div>
+
+        <div class="table-container">
+            <table id="prospectingTable">
+                <thead>
+                    <tr id="headerRow">
+                        <th class="metric-header">Prospecting Metrics</th>
+                        <!-- Week columns will be dynamically generated -->
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Rows will be dynamically generated -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary">
+            <h3>Quarterly Summary</h3>
+            <div class="summary-stats" id="summaryStats">
+                <!-- Summary will be dynamically generated -->
+            </div>
+        </div>
+
+        <footer>
+            <p>Click any cell to edit. Data automatically saves as you type.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
