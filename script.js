@@ -79,7 +79,11 @@ class QuarterlyProspectingTracker {
     createTableBody() {
         const tableBody = document.getElementById('tableBody');
         
-        this.metrics.forEach(metric => {
+        // Count editable metrics for tab order calculation
+        const editableMetrics = this.metrics.filter(metric => metric.type === 'editable');
+        const editableMetricsCount = editableMetrics.length;
+        
+        this.metrics.forEach((metric, metricIndex) => {
             const row = document.createElement('tr');
             
             if (metric.type === 'section') {
@@ -104,8 +108,11 @@ class QuarterlyProspectingTracker {
                 
                 row.appendChild(nameCell);
                 
+                // Get the index of this metric among editable metrics only
+                const editableMetricIndex = editableMetrics.findIndex(m => m.key === metric.key);
+                
                 // Week data cells
-                this.weeks.forEach(week => {
+                this.weeks.forEach((week, weekIndex) => {
                     const dataCell = document.createElement('td');
                     
                     if (metric.type === 'editable') {
@@ -114,10 +121,18 @@ class QuarterlyProspectingTracker {
                         dataCell.dataset.metric = metric.key;
                         dataCell.dataset.week = week.key;
                         dataCell.textContent = this.getCellValue(metric.key, week.key);
+                        
+                        // Set tabindex to go top to bottom (down each week column)
+                        // Formula: (weekIndex * editableMetricsCount) + editableMetricIndex + 1
+                        const tabIndex = (weekIndex * editableMetricsCount) + editableMetricIndex + 1;
+                        dataCell.tabIndex = tabIndex;
+                        
                     } else if (metric.type === 'calculated') {
                         dataCell.className = 'calculated-cell';
                         dataCell.id = `${metric.key}-${week.key}`;
                         dataCell.textContent = this.calculateValue(metric.key, week.key);
+                        // Calculated cells should not be tabbable
+                        dataCell.tabIndex = -1;
                     }
                     
                     row.appendChild(dataCell);
@@ -296,7 +311,7 @@ class QuarterlyProspectingTracker {
                     <div class="day-notes">
                         <label for="dayNotes">Notes for this day:</label>
                         <textarea id="dayNotes" rows="4" placeholder="Add notes for this day..."></textarea>
-                        <button onclick="prospectingTracker.saveDayNotes()">Save Notes</button>
+                        <button onclick="window.prospectingTracker.saveDayNotes()">Save Notes</button>
                     </div>
                 </div>
             </div>
@@ -357,7 +372,7 @@ class QuarterlyProspectingTracker {
             campaignDiv.className = 'campaign-item';
             campaignDiv.innerHTML = `
                 <span class="campaign-name">${campaign}</span>
-                <button class="delete-btn" onclick="prospectingTracker.deleteCampaign(${index})">Delete</button>
+                <button class="delete-btn" onclick="window.prospectingTracker.deleteCampaign(${index})">Delete</button>
             `;
             campaignList.appendChild(campaignDiv);
         });
